@@ -6,7 +6,7 @@
 /*   By: fredchar <fredchar@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 15:44:09 by fredchar          #+#    #+#             */
-/*   Updated: 2026/01/12 17:16:43 by fredchar         ###   ########.fr       */
+/*   Updated: 2026/01/12 17:26:09 by fredchar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 int	ft_strlen(char *str)
 {
 	int	i;
-	
+
 	i = 0;
 	while (str[i++])
 		;
@@ -54,22 +54,40 @@ char	*extract_line(char **stash)
 	return (line);
 }
 
-char	*get_next_line(int fd)
+void	stash_init(char **stash_pointer)
 {
-	char buffer[BUFFER_SIZE + 1];
-	char 		*line;
-	static char		*stash;
-	int			bytes;
-	
-	if (BUFFER_SIZE <= 0 || fd < 0 || fd >= FOPEN_MAX)
-		return (NULL);
+	char	*stash;
+
+	stash = *stash_pointer;
 	if (!stash)
 	{
 		stash = malloc(1);
 		if (!stash)
-			return (NULL);
+			return ;
 		stash[0] = '\0';
+		*stash_pointer = stash;
 	}
+}
+
+char	*stash_update(char *stash, char *buffer)
+{
+	char	*temp;
+
+	temp = ft_strjoin(stash, buffer);
+	free(stash);
+	return (temp);
+}
+
+char	*get_next_line(int fd)
+{
+	char		buffer[BUFFER_SIZE + 1];
+	char		*line;
+	static char	*stash;
+	int			bytes;
+
+	if (BUFFER_SIZE <= 0 || fd < 0 || fd >= FOPEN_MAX)
+		return (NULL);
+	stash_init(&stash);
 	while (!(ft_strchr(stash, '\n')))
 	{
 		bytes = read(fd, buffer, BUFFER_SIZE);
@@ -81,41 +99,37 @@ char	*get_next_line(int fd)
 			stash = NULL;
 			return (NULL);
 		}
-		char *temp = ft_strjoin(stash, buffer);
-		free(stash);
-		stash = temp;
+		stash = stash_update(stash, buffer);
 	}
 	if (!stash[0])
 		return (NULL);
-	else
-		line = extract_line(&stash);
-	return (line);
+	return (extract_line(&stash));
 }
 
-int main(int argc, char **argv)
-{
-    int     fd;
-    char    *line;
+// int main(int argc, char **argv)
+// {
+//     int     fd;
+//     char    *line;
 
-    if (argc != 2)
-    {
-        printf("Usage: %s <file>\n", argv[0]);
-        return (1);
-    }
+//     if (argc != 2)
+//     {
+//         printf("Usage: %s <file>\n", argv[0]);
+//         return (1);
+//     }
 
-    fd = open(argv[1], O_RDONLY);
-    if (fd < 0)
-    {
-        perror("open");
-        return (1);
-    }
+//     fd = open(argv[1], O_RDONLY);
+//     if (fd < 0)
+//     {
+//         perror("open");
+//         return (1);
+//     }
 
-    while ((line = get_next_line(fd)) != NULL)
-    {
-        printf("%s", line);
-        free(line);
-    }
+//     while ((line = get_next_line(fd)) != NULL)
+//     {
+//         printf("%s", line);
+//         free(line);
+//     }
 
-    close(fd);
-    return (0);
-}
+//     close(fd);
+//     return (0);
+// }
