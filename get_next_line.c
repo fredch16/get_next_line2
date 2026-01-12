@@ -6,7 +6,7 @@
 /*   By: fredchar <fredchar@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 15:44:09 by fredchar          #+#    #+#             */
-/*   Updated: 2026/01/12 17:26:09 by fredchar         ###   ########.fr       */
+/*   Updated: 2026/01/12 17:34:47 by fredchar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,38 +19,30 @@ int	ft_strlen(char *str)
 	int	i;
 
 	i = 0;
-	while (str[i++])
-		;
+	while (str[i])
+		i++;
 	return (i);
-}
-
-void	update_stash(char **stash, int index)
-{
-	char	*oldstash;
-	char	*newstash;
-	int		stash_len;
-
-	oldstash = *stash;
-	stash_len = ft_strlen(oldstash);
-	newstash = (char *)malloc(sizeof(char) * (stash_len - (index + 1)));
-	ft_strlcpy(newstash, (oldstash + index + 1), stash_len - index);
-	free(oldstash);
-	*stash = newstash;
 }
 
 char	*extract_line(char **stash)
 {
-	char	*whole;
+	char	*oldstash;
 	int		i;
 	char	*line;
+	char	*newstash;
+	int		stash_len;
 
 	i = 0;
-	whole = *stash;
-	while (whole[i] && whole[i] != '\n')
+	oldstash = *stash;
+	while (oldstash[i] && oldstash[i] != '\n')
 		i++;
 	line = (char *)malloc(sizeof(char) * i + 2);
-	ft_strlcpy(line, whole, i + 2);
-	update_stash(stash, i);
+	ft_strlcpy(line, oldstash, i + 2);
+	stash_len = ft_strlen(oldstash);
+	newstash = (char *)malloc(sizeof(char) * (stash_len - (i + 1)));
+	ft_strlcpy(newstash, (oldstash + i + 1), stash_len - i);
+	free(oldstash);
+	*stash = newstash;
 	return (line);
 }
 
@@ -81,7 +73,6 @@ char	*stash_update(char *stash, char *buffer)
 char	*get_next_line(int fd)
 {
 	char		buffer[BUFFER_SIZE + 1];
-	char		*line;
 	static char	*stash;
 	int			bytes;
 
@@ -99,6 +90,7 @@ char	*get_next_line(int fd)
 			stash = NULL;
 			return (NULL);
 		}
+		buffer[bytes] = '\0';
 		stash = stash_update(stash, buffer);
 	}
 	if (!stash[0])
