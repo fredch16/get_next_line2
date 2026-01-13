@@ -6,7 +6,7 @@
 /*   By: fredchar <fredchar@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 15:44:09 by fredchar          #+#    #+#             */
-/*   Updated: 2026/01/13 18:12:52 by fredchar         ###   ########.fr       */
+/*   Updated: 2026/01/13 18:14:00 by fredchar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,21 +44,6 @@ char	*extract_line(char **stash)
 	*stash = temp;
 	return (line);
 }
-
-// void stash_init(char **stash_pointer)
-// {
-// 	char *stash;
-
-// 	stash = *stash_pointer;
-// 	if (!stash)
-// 	{
-// 		stash = (char *)malloc(1);
-// 		if (!stash)
-// 			return;
-// 		stash[0] = '\0';
-// 		*stash_pointer = stash;
-// 	}
-// }
 
 char	*stash_update(char *stash, char *buffer)
 {
