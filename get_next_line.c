@@ -6,7 +6,7 @@
 /*   By: fredchar <fredchar@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 15:44:09 by fredchar          #+#    #+#             */
-/*   Updated: 2026/01/13 18:14:00 by fredchar         ###   ########.fr       */
+/*   Updated: 2026/01/13 18:37:00 by fredchar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,14 +93,12 @@ char	*get_next_line(int fd)
 //         printf("Usage: %s <file>\n", argv[0]);
 //         return (1);
 //     }
-
 //     fd = open(argv[1], O_RDONLY);
 //     if (fd < 0)
 //     {
 //         perror("open");
 //         return (1);
 //     }
-
 //     while ((line = get_next_line(fd)) != NULL)
 //     {
 //         printf("%s", line);
@@ -109,11 +107,9 @@ char	*get_next_line(int fd)
 // 	// line = get_next_line(fd);
 // 	// printf("1: %s", line);
 // 	// free(line);
-
 // 	// line = get_next_line(fd);
 // 	// printf("2: %s", line);
 // 	// free(line);
-
 //     close(fd);
 //     return (0);
 // }
